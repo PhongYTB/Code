@@ -6,33 +6,21 @@
 </head>
 <body>
 <script>
-function hash(input) {
-  let h = 0
-  for (let i = 0; i < input.length; i++) {
-    h = (h << 5) - h + input.charCodeAt(i)
-    h = h & h
+function randomToken(len) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const arr = new Uint32Array(len)
+  crypto.getRandomValues(arr)
+  let out = ""
+  for (let i = 0; i < len; i++) {
+    out += chars[arr[i] % chars.length]
   }
-  return Math.abs(h).toString(36)
+  return out
 }
 
-const today = new Date()
-const dateKey =
-  today.getFullYear().toString() +
-  (today.getMonth() + 1).toString() +
-  today.getDate().toString()
-
-const secret = "earncoin_secret"
-const raw = secret + dateKey
-const encoded = hash(raw) + hash(raw + "x")
-
-const key = "Earncoin_" + encoded
+const key = "Earncoin_" + randomToken(28)
 
 navigator.clipboard.writeText(key).then(() => {
-  alert("Code đã được copy vào clipboard")
-  setTimeout(() => {
-    window.open("", "_self")
-    window.close()
-  }, 80)
+  location.replace("https://www.google.com")
 })
 </script>
 </body>
